@@ -24,13 +24,15 @@ cp -f ${HOST_DIR}/.bashrc ${HOST_HOME}/
 
 docker run -ti --rm \
      --gpus all,capabilities=graphics \
-     --net=host \
-     --env="DISPLAY" \
+     --net=host --env="DISPLAY" \
      -v /dev/bus/usb:/dev/bus/usb \
      -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
      -v ~/.Xauthority:/home/${HOST_USER}/.Xauthority:rw \
      -v $(realpath ${HOST_HOME}):/home/${HOST_USER} \
-     -v /dev/snd:/dev/snd:rw \
-     -v /dev/dri:/dev/dri:rw \
+     -v /etc/hosts:/etc/hosts \
+     --device /dev/snd \
+     --device /dev/dri \
      -v $(realpath ${1}):/home/$(basename ${1}) \
-     unity3d bash
+     -v /dev/shm:/dev/shm \
+     -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw \
+     --privileged --group-add plugdev unity3d bash

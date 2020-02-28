@@ -10,10 +10,8 @@ RUN dpkg --add-architecture i386 && \
     && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
-
-RUN DEBIAN_FRONTEND=noninteractive apt update -y && \
-    apt install -y \
+RUN apt update -y && \
+    DEBIAN_FRONTEND=noninteractive apt install -y \
     git \
     imagemagick \
     curl \
@@ -71,13 +69,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt update -y && \
     fuse \
     blender \
     mesa-utils \
-    && \
-    apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN DEBIAN_FRONTEND=noninteractive apt update -y && \
-    apt install -y \
     desktop-file-utils \
     zenity \
+    chromium-browser \
+    firefox \
+    dbus-x11 \
+    cpio \
+    ubuntu-desktop \
     && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
