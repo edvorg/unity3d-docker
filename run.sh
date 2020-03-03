@@ -22,17 +22,23 @@ mkdir -p ${HOST_HOME}
 
 cp -f ${HOST_DIR}/.bashrc ${HOST_HOME}/
 
+if which nvidia-smi ; then
+    GPU_FLAGS="--gpus all,capabilities=graphics"
+else
+    GPU_FLAGS=
+fi
+
 docker run -ti --rm \
-     --gpus all,capabilities=graphics \
-     --net=host --env="DISPLAY" \
-     -v /dev/bus/usb:/dev/bus/usb \
-     -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-     -v ~/.Xauthority:/home/${HOST_USER}/.Xauthority:rw \
-     -v $(realpath ${HOST_HOME}):/home/${HOST_USER} \
-     -v /etc/hosts:/etc/hosts \
-     --device /dev/snd \
-     --device /dev/dri \
-     -v $(realpath ${1}):/home/$(basename ${1}) \
-     -v /dev/shm:/dev/shm \
-     -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw \
-     --privileged --group-add plugdev unity3d bash
+    ${GPU_FLAGS} \
+    --net=host --env="DISPLAY" \
+    -v /dev/bus/usb:/dev/bus/usb \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+    -v ~/.Xauthority:/home/${HOST_USER}/.Xauthority:rw \
+    -v $(realpath ${HOST_HOME}):/home/${HOST_USER} \
+    -v /etc/hosts:/etc/hosts \
+    --device /dev/snd \
+    --device /dev/dri \
+    -v $(realpath ${1}):/home/$(basename ${1}) \
+    -v /dev/shm:/dev/shm \
+    -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:rw \
+    --privileged --group-add plugdev unity3d bash
